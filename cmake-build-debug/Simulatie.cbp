@@ -78,7 +78,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/tom/ownCloud/Simulatie/Functions.h">
+		<Unit filename="/Users/tom/ownCloud/Simulatie/Functions.cpp">
 			<Option target="Simulatie"/>
 		</Unit>
 		<Unit filename="/Users/tom/ownCloud/Simulatie/main.cpp">

@@ -4,111 +4,123 @@
 #include <string>
 #include <random>
 #include <functional>
-#include "Declarations.h"
 using namespace std;
-/*    void Filament::growing()
-    {
-        length = length + (V_g - V_s) * dt;
+#include "Declarations.h"
+#include "PARAMETERS.h"
+#include "Filaments.h"
+int shrink_ctr = 0;
+int grow_ctr = 0;
+int outlier = 0;
+
+void nucleation(){
+    Filament new_filament;
+    if (rnd() < P_nuc){
+        collection.push_back(new_filament);
     }
-    void shrinking()
-    {
-        length = length - V_s * dt;
-    }
-    void capping()
-    {
-        state = states[1];
-    }
+}
 
-    // generates uniformly a random number between 0 and 1 by using the rdmg mt19937 which uses a mersenne twister algorithm
-    double rnd()
-    {
-        mt19937::result_type seed = 2;
-        auto real_rand = std::bind(std::uniform_real_distribution<double>(0,1),
-                           mt19937(seed));
-        return real_rand();
-    }
-
-    void nucleation()
-    {
-        if (rdm() < P_nuc){
-
-        }
-    }
-
-
-    void Stamp()
-    {
-        time_t now = time(0);
-
-        // convert now to string form
-        char* dt = ctime(&now);
-
-        // attach timestamp to filename
-        string filename = "Test ";
-        filename =  filename + dt;
-
-        // create file with filename
-        ofstream f;
-        f.open( C:filename.c_str() );
-        f.close();
-  }
-
-  void check_filaments()
-  {
-    for (auto f : filament_ctr){             // Iterate over filaments
-            if(f.state == growing)
-            {
-                if (rdm() < P_c){
-                    f.capping();
-                } else if (rdm() < P_c){
-                    severing();
-                } else {
-                    f.growing();
-                }
-
-            } else {
-
+void evolve(){
+    for(auto& filament : collection){
+        filament.age += dt;
+        if(filament.state == SHRINKING){
+            filament.shrink();
+            if(filament.size < 0){
+                filament.state = DEAD;
             }
+        } else if (filament.state == GROWING && rnd() < P_cap){
+            filament.cap();
+        } else {
+            filament.grow();
         }
-  }
-
-void Stamp()
+    }
+    // deletes all dead filaments from collection
+    for (vector<Filament>::iterator filament = collection.begin(); filament!=collection.end(); /*it++*/) //<----------- I commented it.
     {
-        // create file with filename
-        ofstream f;
-        f.open(string("/home/ipausers/vdmijn/ownCloud/Documents/Particle-based stochastic model for actin duynamics/Resultaten/") + filename );
-        f << "yeah kijk is aan" << endl;
-        f.close();
-  }
-string("c://home/ipausers/vdmijn/ownCloud/Documents/Particle-based stochastic model for actin duynamics/Resultaten/"
-*/
+        if(filament -> state == DEAD)
+            filament = collection.erase(filament);
+        else
+            ++filament;
+    }
+}
 
-string Time_stamp()
+void measure(){
+    for(auto& filament : collection){
+        int bin = filament.size / bin_size;
+        // delete outlier value the next run
+        if(filament.size > L_s){
+            outlier ++;
+            filament.size = 0;
+            filament.state = SHRINKING;
+        } else if (filament.state == SHRINKING){
+            a_shrinking [bin] ++;
+        } else {
+            a_growing [bin] ++;
+        }
+    }
+}
+
+void update_results(){
+    cout << outlier << endl;
+    ofstream f_growing;
+    // Create data file for the growing data
+    f_growing.open("/Users/tom/ownCloud/Resultaten/" + file_name + "_growing");
+    // Write date to file, separated by a space
+    for (auto i : a_growing){
+        f_growing << i << " ";
+    }
+    // Close the file
+    f_growing.close();
+    ofstream f_shrinking;
+    // Create data file for the shrinking data
+    f_shrinking.open("/Users/tom/ownCloud/Resultaten/" + file_name + "_shrinking");
+    // Write data to file, separated by a space
+    for (auto i : a_shrinking){
+        f_shrinking << i << " ";
+    }
+    // Close the file
+    f_shrinking.close();
+}
+
+
+string time_stamp()
 {
-    time_t now = time(0);
+    time_t now = time(NULL);
 
     // convert now to string form
-    string dt = ctime(&now);
+    string del_t = ctime(&now);
 
-    return dt;
+    return del_t;
 }
 
-void Stamp()
+void stamp()
 {
-    // create file with filename
-    fstream f;
-    //char ch;
-    f.open("eindelijk");
-    //reading.open("PARAMETERS.h");
-    if(!f.is_open()){
+    // create file were parameters are written to
+    char ch;
+    file_name = Project_name + time_stamp();                                    // create a file name
+    ofstream f;
+    f.open("/Users/tom/ownCloud/Resultaten/" + file_name + "_parameters");    // create file in seperate
+
+    ifstream f_2;
+    f_2.open("/Users/tom/ownCloud/Simulatie/PARAMETERS.h");
+    if(!f_2.is_open() && !f.is_open()){                                         // check if files opened
         cout << "Oh no, didnt open the file" << endl;
     }
-    f << "hello world";
-    //while (!reading.eof()){
-    //    reading.get(ch);    //reading from file object reading
-        //cout << ch;         //cout << ch;
-    //    writing << ch;  //writing to file.
-    //}
-    //reading.close();
+
+    while (!f_2.eof()) {
+        f_2.get(ch);                                                         //reading from file object reading
+        f << ch;                                                                // writing to file.
+    }
     f.close();
+    f_2.close();
 }
+
+
+double rnd()
+{
+    random_device device;                                             // generates random seed (very slow)
+    mt19937 generator(device());                                      // PRNG that uses Mersenne twister
+    uniform_real_distribution<double> distribution(0,1);        // distribution
+    double rndm = distribution(generator);
+    return rndm ;
+}
+

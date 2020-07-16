@@ -6,15 +6,39 @@
 
 #IncludeRegexTransform: 
 
-/Users/tom/ownCloud/Simulatie/main.cpp
-iostream
+/Users/tom/ownCloud/Simulatie/Declarations.h
+Filaments.h
+/Users/tom/ownCloud/Simulatie/Filaments.h
+PARAMETERS.h
+/Users/tom/ownCloud/Simulatie/PARAMETERS.h
+
+/Users/tom/ownCloud/Simulatie/Filaments.h
+PARAMETERS.h
+/Users/tom/ownCloud/Simulatie/PARAMETERS.h
+
+/Users/tom/ownCloud/Simulatie/Functions.cpp
+ctime
 -
 fstream
 -
+iostream
+-
 string
 -
-vector
+random
 -
-array
+functional
+-
+Declarations.h
+/Users/tom/ownCloud/Simulatie/Declarations.h
+PARAMETERS.h
+/Users/tom/ownCloud/Simulatie/PARAMETERS.h
+Filaments.h
+/Users/tom/ownCloud/Simulatie/Filaments.h
+
+/Users/tom/ownCloud/Simulatie/PARAMETERS.h
+Filaments.h
+/Users/tom/ownCloud/Simulatie/Filaments.h
+math.h
 -
 

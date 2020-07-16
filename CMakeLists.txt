@@ -3,4 +3,4 @@ project(Simulatie)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Simulatie main.cpp Functions.h)
+add_executable(Simulatie main.cpp Functions.cpp)
