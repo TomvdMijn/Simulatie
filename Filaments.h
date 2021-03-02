@@ -1,36 +1,43 @@
 #ifndef FILAMENTS_H_INCLUDED
 #define FILAMENTS_H_INCLUDED
 #include "PARAMETERS.h"
+double rnd();
+extern double dl;
+extern double L_G;
+extern double L_F;
 
 using namespace std;
 enum states{GROWING, SHRINKING, DEAD};
 class Filament{
     public:
-
         double size;
         double age;
         states state;
 
-        Filament(){
-           size = 10;
-           age = 0;
-           state = GROWING;
+        Filament(double init){
+            // same dl as all other growing filaments in this time stap
+            size = init;
+            age = 0;
+            state = GROWING;
         }
-
 
     void grow()
     {
-        size = size + (V_g - V_s) * dt;
+        size = size + dl;
     }
 
     void shrink()
     {
-        size = size - (V_s * dt);
+        size = size - dl_s;
     }
 
     void cap()
     {
         state = SHRINKING;
+    }
+    void severing(double dl_sev)
+    {
+        size = size - dl_sev;
     }
 
 };

@@ -1,4 +1,4 @@
-# Install script for directory: /Users/tom/ownCloud/Simulatie
+# Install script for directory: /Users/tomphilipvandermijn/Documents/Simulatie
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/tom/ownCloud/Simulatie/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/tomphilipvandermijn/Documents/Simulatie/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
