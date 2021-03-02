@@ -9,6 +9,7 @@
 #include "Declarations.h"
 #include "PARAMETERS.h"
 #include "Filaments.h"
+
 using namespace std;
 
 
@@ -116,7 +117,7 @@ void evolve(){
                 double dl_s_temp = rnd() * filament.size;
                 Filament new_filament(dl_s_temp);
                 new_filament.state = SHRINKING;
-                collection.push_back(new_filament);
+                collection.insert(collection.begin(), 1, new_filament);
                 total++;
                 severed++;
                 filament.severing(dl_s_temp);
@@ -132,7 +133,7 @@ void evolve(){
                 double dl_s_temp = rnd() * filament.size;
                 Filament new_filament(dl_s_temp);
                 new_filament.state = SHRINKING;
-                collection.push_back(new_filament);
+                collection.insert(collection.begin(), 1, new_filament);
                 total++;
                 severed++;
                 filament.severing(dl_s_temp);
